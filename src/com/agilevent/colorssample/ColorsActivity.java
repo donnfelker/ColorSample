@@ -32,6 +32,8 @@ public class ColorsActivity extends Activity {
         // 3. Set the listener of the ColorFragment to that of the ColorFragment
         cf = (ColorsFragment)getFragmentManager().findFragmentById(R.id.colors);
         cdf = (ColorDetailFragment)getFragmentManager().findFragmentById(R.id.details); 
+        
+        // Let the ColorsFragment know who to notify when the color changes. 
         cf.setColorChangedListener(cdf); 
         
     }
@@ -40,10 +42,8 @@ public class ColorsActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		new MenuInflater(this).inflate(R.menu.color_menu, menu);
 		
-		EditText add=(EditText)menu
-														.findItem(R.id.add)
-														.getActionView()
-														.findViewById(R.id.color);
+		EditText add=(EditText)menu.findItem(R.id.add)
+			.getActionView().findViewById(R.id.color);
 		
 		add.setOnEditorActionListener(onAdd);
 
@@ -83,8 +83,7 @@ public class ColorsActivity extends Activity {
     
     private TextView.OnEditorActionListener onAdd=
 		new TextView.OnEditorActionListener() {
-		public boolean onEditorAction(TextView v, int actionId,
-																	KeyEvent event) {
+		public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 			if (event==null || event.getAction()==KeyEvent.ACTION_UP) {
 				
 				addColor(v.getText().toString());
