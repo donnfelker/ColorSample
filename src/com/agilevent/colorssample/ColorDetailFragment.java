@@ -17,7 +17,7 @@ public class ColorDetailFragment extends Fragment implements ColorChangedListene
 	@Override
 	public void onColorChanged(SimpleColor color) {
 		layout.setBackgroundColor(color.getColor());
-		Toast.makeText(getActivity(), "Backgournd color changed to: " + color.getName(), Toast.LENGTH_SHORT);
+		Toast.makeText(getActivity(), "Background color changed to: " + color.getName(), Toast.LENGTH_SHORT).show();
 	}
 
 }
