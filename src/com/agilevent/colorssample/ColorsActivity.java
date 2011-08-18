@@ -1,7 +1,6 @@
 package com.agilevent.colorssample;
 
 
-
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -34,7 +33,10 @@ public class ColorsActivity extends Activity {
         cdf = (ColorDetailFragment)getFragmentManager().findFragmentById(R.id.details); 
         
         // Let the ColorsFragment know who to notify when the color changes. 
-        cf.setColorChangedListener(cdf); 
+        cf.setColorChangedListener(cdf);
+
+
+
         
     }
     
@@ -71,13 +73,23 @@ public class ColorsActivity extends Activity {
     
 	@SuppressWarnings("unchecked")
 	private void addColor(String colorWithCode) {
-		ArrayAdapter<SimpleColor> adapter = (ArrayAdapter<SimpleColor>) cf.getListAdapter();
-		
-		String colorName = colorWithCode.substring(0, colorWithCode.indexOf(':'));
-		String colorHex = colorWithCode.substring(colorWithCode.indexOf(':') + 1, colorWithCode.length());
-	
-		
-		adapter.add(new SimpleColor(colorName, Color.parseColor(colorHex)));
+
+        if(colorWithCode.indexOf( ':' ) > 0) {
+
+            ArrayAdapter<SimpleColor> adapter = (ArrayAdapter<SimpleColor>) cf.getListAdapter();
+
+            String colorName = colorWithCode.substring(0, colorWithCode.indexOf(':'));
+            String colorHex = colorWithCode.substring(colorWithCode.indexOf(':') + 1, colorWithCode.length());
+
+            adapter.add(new SimpleColor(colorName, Color.parseColor(colorHex)));
+
+        } else {
+
+            Toast.makeText( this, "Please add a color in this format: ColorName:#HEXVAL", Toast.LENGTH_LONG ).show();
+
+        }
+
+
 	}
     
     

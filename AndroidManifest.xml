@@ -3,9 +3,10 @@
       package="com.agilevent.colorssample"
       android:versionCode="1"
       android:versionName="1.0">
-    <uses-sdk android:minSdkVersion="11" />
+    <uses-sdk android:minSdkVersion="11"
+               />
 
-    <application android:icon="@drawable/icon" android:label="@string/app_name">
+    <application android:icon="@drawable/icon" android:label="@string/app_name" >
         <activity android:name=".ColorsActivity"
                   android:label="@string/app_name">
             <intent-filter>
