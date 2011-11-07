@@ -16,8 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class ColorsActivity extends Activity {
-   
-	//protected ColorsFragment cf;
+
 	protected ColorDetailFragment cdf;
     protected ColorListFragment currentListFragment;
 
@@ -27,16 +26,8 @@ public class ColorsActivity extends Activity {
         super.onCreate(savedInstanceState);
         
         setContentView(R.layout.main);
-        
-        // 1. Get ColorsFragment
-        // 2. Get ColorDetailFragment
-        // 3. Set the listener of the ColorFragment to that of the ColorFragment
-        //cf = (ColorsFragment)getFragmentManager().findFragmentById(R.id.colors);
-        cdf = (ColorDetailFragment)getFragmentManager().findFragmentById(R.id.details); 
-        
-        // Let the ColorsFragment know who to notify when the color changes. 
-        //cf.setColorChangedListener(cdf);
 
+        cdf = (ColorDetailFragment)getFragmentManager().findFragmentById(R.id.details);
 
         final ActionBar bar = getActionBar();
         bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
