@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class ColorsFragment extends ColorListFragment {
+public class RgbFragment extends ColorListFragment {
 	
 	protected List<SimpleColor> colors;
 

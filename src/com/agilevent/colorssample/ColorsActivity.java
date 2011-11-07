@@ -44,8 +44,8 @@ public class ColorsActivity extends Activity {
 
         bar.addTab(bar.newTab()
                 .setText("RGB")
-                .setTabListener(new TabListener<ColorsFragment>(
-                        this, "rgb", ColorsFragment.class)));
+                .setTabListener(new TabListener<RgbFragment>(
+                        this, "rgb", RgbFragment.class)));
 
         bar.addTab(bar.newTab()
                 .setText("Pastel")
@@ -179,7 +179,7 @@ public class ColorsActivity extends Activity {
             if (mFragment == null) {
                 mFragment = (ColorListFragment) Fragment.instantiate( mActivity, mClass.getName(), mArgs );
                 mFragment.setColorChangedListener( cdf );
-                ft.add(R.id.color_content, mFragment, mTag);
+                ft.replace(R.id.color_content, mFragment, mTag);
 
                 currentListFragment = mFragment;
 
