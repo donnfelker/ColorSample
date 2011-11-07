@@ -2,4 +2,5 @@
 <resources>
     <string name="hello">Hello World, ColorsActivity!</string>
     <string name="app_name">Color Watcher</string>
+    <string name="foo"></string>
 </resources>

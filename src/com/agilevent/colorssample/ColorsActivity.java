@@ -1,7 +1,8 @@
 package com.agilevent.colorssample;
 
 
-import android.app.Activity;
+import android.app.*;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -16,8 +17,9 @@ import android.widget.Toast;
 
 public class ColorsActivity extends Activity {
    
-	protected ColorsFragment cf; 
+	//protected ColorsFragment cf;
 	protected ColorDetailFragment cdf;
+    protected ColorListFragment currentListFragment;
 
 	/** Called when the activity is first created. */
     @Override
@@ -29,17 +31,40 @@ public class ColorsActivity extends Activity {
         // 1. Get ColorsFragment
         // 2. Get ColorDetailFragment
         // 3. Set the listener of the ColorFragment to that of the ColorFragment
-        cf = (ColorsFragment)getFragmentManager().findFragmentById(R.id.colors);
+        //cf = (ColorsFragment)getFragmentManager().findFragmentById(R.id.colors);
         cdf = (ColorDetailFragment)getFragmentManager().findFragmentById(R.id.details); 
         
         // Let the ColorsFragment know who to notify when the color changes. 
-        cf.setColorChangedListener(cdf);
+        //cf.setColorChangedListener(cdf);
+
+
+        final ActionBar bar = getActionBar();
+        bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        bar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
+
+        bar.addTab(bar.newTab()
+                .setText("RGB")
+                .setTabListener(new TabListener<ColorsFragment>(
+                        this, "rgb", ColorsFragment.class)));
+
+        bar.addTab(bar.newTab()
+                .setText("Pastel")
+                .setTabListener(new TabListener<PastelsFragment>(
+                        this, "pastel", PastelsFragment.class)));
+
+       bar.addTab(bar.newTab()
+                .setText("Neon")
+                .setTabListener(new TabListener<NeonFragment>(
+                        this, "neon", NeonFragment.class)));
 
 
 
-        
+        if (savedInstanceState != null) {
+            bar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
+        }
+
     }
-    
+
     @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		new MenuInflater(this).inflate(R.menu.color_menu, menu);
@@ -58,7 +83,7 @@ public class ColorsActivity extends Activity {
 		
 		
 			case R.id.reset:
-				cf.reset(); 
+				currentListFragment.reset();
 				return(true);
 
 			case R.id.about:				
@@ -70,13 +95,13 @@ public class ColorsActivity extends Activity {
 		return(super.onOptionsItemSelected(item));
 	}
 
-    
+
 	@SuppressWarnings("unchecked")
 	private void addColor(String colorWithCode) {
 
         if(colorWithCode.indexOf( ':' ) > 0) {
 
-            ArrayAdapter<SimpleColor> adapter = (ArrayAdapter<SimpleColor>) cf.getListAdapter();
+            ArrayAdapter<SimpleColor> adapter = (ArrayAdapter<SimpleColor>) currentListFragment.getListAdapter();
 
             String colorName = colorWithCode.substring(0, colorWithCode.indexOf(':'));
             String colorHex = colorWithCode.substring(colorWithCode.indexOf(':') + 1, colorWithCode.length());
@@ -85,8 +110,17 @@ public class ColorsActivity extends Activity {
 
         } else {
 
-            Toast.makeText( this, "Please add a color in this format: ColorName:#HEXVAL", Toast.LENGTH_LONG ).show();
-
+            new AlertDialog.Builder(this)
+                    .setIcon( android.R.drawable.ic_dialog_alert )
+                    .setMessage( "Please add a color in this format: ColorName:#HEXVAL" )
+                    .setPositiveButton( android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    })
+                    .create()
+                    .show();
         }
 
 
@@ -111,6 +145,59 @@ public class ColorsActivity extends Activity {
 			return(true);
 		}
 	};
+
+    public class TabListener<T extends ColorListFragment> implements ActionBar.TabListener {
+        private final Activity mActivity;
+        private final String mTag;
+        private final Class<T> mClass;
+        private final Bundle mArgs;
+        protected ColorListFragment mFragment;
+
+
+        public TabListener(Activity activity, String tag, Class<T> clz) {
+            this(activity, tag, clz, null);
+        }
+
+        public TabListener(Activity activity, String tag, Class<T> clz, Bundle args) {
+            mActivity = activity;
+            mTag = tag;
+            mClass = clz;
+            mArgs = args;
+
+            // Check to see if we already have a fragment for this tab, probably
+            // from a previously saved state.  If so, deactivate it, because our
+            // initial state is that a tab isn't shown.
+            mFragment = (ColorListFragment) mActivity.getFragmentManager().findFragmentByTag(mTag);
+            if (mFragment != null && !mFragment.isDetached()) {
+                FragmentTransaction ft = mActivity.getFragmentManager().beginTransaction();
+                ft.detach(mFragment);
+                ft.commit();
+            }
+        }
+
+        public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+            if (mFragment == null) {
+                mFragment = (ColorListFragment) Fragment.instantiate( mActivity, mClass.getName(), mArgs );
+                mFragment.setColorChangedListener( cdf );
+                ft.add(R.id.color_content, mFragment, mTag);
+
+                currentListFragment = mFragment;
+
+            } else {
+                ft.attach(mFragment);
+            }
+        }
+
+        public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
+            if (mFragment != null) {
+                ft.detach(mFragment);
+            }
+        }
+
+        public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+            Toast.makeText(mActivity, "Reselected!", Toast.LENGTH_SHORT).show();
+        }
+    }
 	
     
     

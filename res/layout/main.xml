@@ -4,21 +4,31 @@
     android:orientation="horizontal"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
-    
-   	<fragment 
-   		class="com.agilevent.colorssample.ColorsFragment"
-		android:id="@+id/colors"
-		android:layout_weight="30"
+
+     <LinearLayout
+        android:id="@+id/color_content"
+        android:layout_weight="30"
+		android:layout_width="0px"
+		android:layout_height="fill_parent">
+
+        <!--<fragment -->
+            <!--class="com.agilevent.colorssample.ColorsFragment"-->
+            <!--android:id="@+id/colors"-->
+            <!--android:layout_height="fill_parent"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--/>-->
+
+      </LinearLayout>
+
+
+    <fragment
+        class="com.agilevent.colorssample.ColorDetailFragment"
+        android:id="@+id/details"
+        android:layout_weight="70"
 		android:layout_width="0px"
 		android:layout_height="fill_parent"
-		/>
-	
-	<fragment 
-		class="com.agilevent.colorssample.ColorDetailFragment"
-		android:id="@+id/details"
-		android:layout_weight="70"
-		android:layout_width="0px"
-		android:layout_height="fill_parent"
-		/>
+        />
+
+
 	
 </LinearLayout>

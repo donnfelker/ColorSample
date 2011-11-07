@@ -11,59 +11,63 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class ColorsFragment extends ColorListFragment {
-	
-	protected List<SimpleColor> colors;
+public class PastelsFragment extends ColorListFragment {
+
+    protected List<SimpleColor> colors;
+	protected ColorChangedListener listener;
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
-		
+
 		super.onActivityCreated(savedInstanceState);
-		
-		colors = ColorFactory.getColors(); 
-		
+
+		colors = ColorFactory.getPastelColors();
+
 		setListAdapter(new ColorsAdapter());
 	}
-	
+
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		
-		// Notify listener that a color has been changed. 
+
+		// Notify listener that a color has been changed.
 		if(listener != null)
-			listener.onColorChanged(colors.get(position)); 
-		
+			listener.onColorChanged(colors.get(position));
+
 	}
-	
+
+	public void setColorChangedListener(ColorChangedListener listener) {
+		this.listener = listener;
+	}
 
 	class ColorsAdapter extends ArrayAdapter<SimpleColor> {
 
 		public ColorsAdapter() {
 			super(getActivity(), android.R.layout.simple_list_item_activated_1, colors);
 		}
-		
+
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			
+
 			if(convertView == null) {
-				convertView= LayoutInflater.from(getActivity()).inflate(android.R.layout.simple_list_item_activated_1, null);
+				convertView= LayoutInflater.from( getActivity() ).inflate(android.R.layout.simple_list_item_activated_1, null);
 			}
-			
+
 			SimpleColor color = colors.get(position);
-			convertView.setTag(color); 
+			convertView.setTag(color);
 			TextView colorName = (TextView)convertView.findViewById(android.R.id.text1);
 			colorName.setText(color.getName());
-			
-			return convertView; 
+
+			return convertView;
 		}
-		
+
 	}
-	
+
 	public void reset() {
-		// Uses the colors object, which only has our defaults in it. 
-		colors = ColorFactory.getColors(); 
+		// Uses the colors object, which only has our defaults in it.
+		colors = ColorFactory.getPastelColors();
 		setListAdapter(new ColorsAdapter());
-		
-		// Notify listener that it should reset it self to transparent. 
-		listener.onColorChanged(new SimpleColor("transparent", Color.parseColor("#00000000"))); 
+
+		// Notify listener that it should reset it self to transparent.
+		listener.onColorChanged(new SimpleColor("transparent", Color.parseColor( "#00000000" )));
 	}
 }
